@@ -17,15 +17,15 @@ $c = new RRoEmbed_Consumer();
 //	new RRoEmbed_Provider_Flickr()
 //);
 
-//$o = $c->consume(
-//	'http://vimeo.com/15952335',
-//	new RRoEmbed_Provider_Vimeo()
-//);
-
 $o = $c->consume(
-	'http://www.dailymotion.com/video/xf02xp_uffie-difficult_music',
-	new RRoEmbed_Provider_Dailymotion()
+	'http://vimeo.com/15952335',
+	new RRoEmbed_Provider_Vimeo()
 );
+
+//$o = $c->consume(
+//	'http://www.dailymotion.com/video/xf02xp_uffie-difficult_music',
+//	new RRoEmbed_Provider_Dailymotion()
+//);
 
 
 // Notice you can also omit to specify the provider, if so the Consumer will try to

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Copyright (c) 2010 Romain Ruetschi <romain.ruetschi@gmail.com>
+ * Copyright (c) 2010 Laurent cherpit <laurent.cherpit@gmail.com>
  * 
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -22,40 +22,51 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
+ 
 /**
- * Source file containing class RRoEmbed_Provider_YouTube.
- * 
- * @package    RRoEmbed
- * @license    http://opensource.org/licenses/mit-license.html MIT License
- * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
- * @version    0.1
- * @see        RRoEmbed_Provider_YouTube
+ * Source file containing class ${CLASS}
+ * @package     RRoEmbed
+ * @license     http://opensource.org/licenses/mit-license.html MIT License
+ * @author      Laurent cherpit <laurent.cherpit@gmail.com>
+ * @date:       23 nov. 2010
+ * @time:       15:52:01
+ * @version:    0.1
  */
 
 /**
- * Class RRoEmbed_Provider_YouTube.
- * 
- * @todo       Description for class RRoEmbed_Provider_YouTube.
+ * Abstract Class RRoEmbed_Provider_AbstractArguments.
+ *
+ * @todo       Description Abstract for class RRoEmbed_Provider_AbstractArguments.
  *
  * @package    RRoEmbed
  * @license    http://opensource.org/licenses/mit-license.html MIT License
- * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
+ * @author     Laurent Cherpit <laurent.cherpit@gmail.com>
  * @version    0.1
  */
-class RRoEmbed_Provider_YouTube extends RRoEmbed_Provider_AbstractProvider
+Abstract class RRoEmbed_Provider_AbstractArguments implements ArrayAccess
 {
-    
-    public function __construct()
+    public function __construct( array $arguments = array() )
     {
-        parent::__construct(
-            'http://www.youtube.com/oembed',
-            array(
-                'http://*.youtube.com/*'
-            ),
-            'http://www.youtube.com',
-            'YouTube'
-        );
+
     }
-    
+
+	public function offsetSet( $offset, $value )
+	{
+
+	}
+
+	public function offsetGet( $offset )
+	{
+
+	}
+
+	public function offsetUnSet()
+	{
+
+	}
+
+	public function offsetExists( $offset )
+	{
+
+	}
 }

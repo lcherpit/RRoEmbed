@@ -42,9 +42,30 @@
  * @license    http://opensource.org/licenses/mit-license.html MIT License
  * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
  * @version    0.1
+ * @author     Laurent Cherpit <laurent.cherpit@gmail.com>
+ * @version    0.2
  */
-class RRoEmbed_Provider_Vimeo extends RRoEmbed_Provider
+class RRoEmbed_Provider_Vimeo extends RRoEmbed_Provider_AbstractProvider
 {
+	/**
+	 * The exact width of the video. Defaults to original size.
+	 * (optional)
+	 *
+	 * @var Integer
+	 */
+	protected $_width;
+
+	/**
+	 * Same as width, but video will not exceed original size.
+	 * (optional)
+	 * 
+	 * @var Integer
+	 */
+	protected $_maxwidth;
+
+	protected $_height;
+
+	protected $_maxheight;
     
     public function __construct()
     {
@@ -60,3 +81,36 @@ class RRoEmbed_Provider_Vimeo extends RRoEmbed_Provider
     }
     
 }
+/*
+url
+The Vimeo URL for a video.
+width
+(optional) The exact width of the video. Defaults to original size.
+maxwidth
+(optional) Same as width, but video will not exceed original size.
+height
+(optional) The exact height of the video. Defaults to original size.
+maxheight
+(optional) Same as height, but video will not exceed original size.
+byline
+(optional) Show the byline on the video. Defaults to true.
+title
+(optional) Show the title on the video. Defaults to true.
+portrait
+(optional) Show the user's portrait on the video. Defaults to true.
+color
+(optional) Specify the color of the video controls.
+callback
+(optional) When returning JSON, wrap in this function.
+autoplay
+(optional) Automatically start playback of the video. Defaults to false.
+xhtml
+(optional) Make the embed code XHTML compliant. Defaults to true.
+api
+(optional) Enable the Javascript API for Moogaloop. Defaults to false.
+wmode
+(optional) Add the "wmode" parameter. Can be either transparent or opaque.
+iframe
+(optional) Use our new embed code. Defaults to true. NEW!
+
+	*/

@@ -44,7 +44,7 @@
  * @author     Laurent Cherpit <laurent.cherpit@gmail.com>
  * @version    0.1
  */
-class RRoEmbed_Provider_Dailymotion extends RRoEmbed_Provider
+class RRoEmbed_Provider_Dailymotion extends RRoEmbed_Provider_AbstractProvider
 {
     
     public function __construct()

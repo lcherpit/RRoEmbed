@@ -89,14 +89,14 @@ class RRoEmbed_Consumer
      * or try to discover the right one.
      *
      * @param  string            $url         The URL of the resource to consume.
-     * @param  RRoEmbed_Provider $provider    The provider to use.
+     * @param  RRoEmbed_Provider_AbstractProvider $provider    The provider to use.
      * @param  string            $format      The format of the data to fetch.
      *
      * @return RRoEmbed_Resource_AbstractResource
      *
      * @author Romain Ruetschi <romain.ruetschi@gmail.com>
      */
-    public function consume( $url, RRoEmbed_Provider $provider = NULL, $format = self::FORMAT_DEFAULT )
+    public function consume( $url, RRoEmbed_Provider_AbstractProvider $provider = NULL, $format = self::FORMAT_DEFAULT )
     {
         // Try to find a provider matching the supplied URL if no one has been supplied.
         if( !$provider )
@@ -169,19 +169,26 @@ class RRoEmbed_Consumer
      * @return string
      *
      * @author Romain Ruetschi <romain.ruetschi@gmail.com>
+     * @author Laurent Cherpit <laurent.cherpit@gmail.com>
      */
     protected function _buildOEmbedRequestUrl( $resource, $endPoint, $format = self::FORMAT_DEFAULT )
     {
-        $parameters = array(
-            'url'    => $resource,
-            'format' => $format
-        );
+	    // local var endPoint QuerySrting parameters
+	    $parameters = array(
+		    'url' => $resource
+	    );
+	    
+	    if( strpos( $endPoint, self::FORMAT_JSON ) !== FALSE || strpos( $endPoint, self::FORMAT_XML ) !== FALSE )
+	    {
+			$parameters[ 'format' ] = $format;
+	    }
         
         $urlParams = http_build_query( $parameters, '', '&' );
         $url       = $endPoint
                    . ( ( strpos( $endPoint, '?' ) !== FALSE ) ? '&' : '?' )
                    . $urlParams;
-        
+
+        var_dump( $url );
         return $url;
     }
     
@@ -190,7 +197,7 @@ class RRoEmbed_Consumer
      *
      * @param  string $url The URL to find an oEmbed provider for.
      * 
-     * @return RRoEmbed_Provider
+     * @return RRoEmbed_Provider_AbstractProvider
      *
      * @author Romain Ruetschi <romain.ruetschi@gmail.com>
      */

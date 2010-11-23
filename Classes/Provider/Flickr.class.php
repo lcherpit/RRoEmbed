@@ -43,7 +43,7 @@
  * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
  * @version    0.1
  */
-class RRoEmbed_Provider_Flickr extends RRoEmbed_Provider
+class RRoEmbed_Provider_Flickr extends RRoEmbed_Provider_AbstractProvider
 {
     
     public function __construct()

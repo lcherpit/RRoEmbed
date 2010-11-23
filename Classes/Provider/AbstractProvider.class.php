@@ -24,26 +24,26 @@
  */
 
 /**
- * Source file containing class RRoEmbed_Provider.
+ * Source file containing class RRoEmbed_Provider_AbstractProvider.
  * 
  * @package    RRoEmbed
  * @license    http://opensource.org/licenses/mit-license.html MIT License
  * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
  * @version    0.1
- * @see        RRoEmbed_Provider
+ * @see        RRoEmbed_Provider_AbstractProvider
  */
 
 /**
- * Class RRoEmbed_Provider.
+ * Abstract Class RRoEmbed_Provider_AbstractProvider.
  * 
- * @todo       Description for class RRoEmbed_Provider.
+ * @todo       Description for Abstract class RRoEmbed_Provider_AbstractProvider.
  *
  * @package    RRoEmbed
  * @license    http://opensource.org/licenses/mit-license.html MIT License
  * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
  * @version    0.1
  */
-class RRoEmbed_Provider
+Abstract class RRoEmbed_Provider_AbstractProvider
 {
 
     /**
@@ -75,7 +75,7 @@ class RRoEmbed_Provider
     protected $_endpoint = '';
     
     /**
-     * Create a new RRoEmbed_Provider instance.
+     * Create a new RRoEmbed_Provider_AbstractProvider instance.
      *
      * @param string $endpoint The provider's endpoint URL.
      * @param array  $schemes The schemes the providers match.
