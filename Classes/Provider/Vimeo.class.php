@@ -45,7 +45,7 @@
  * @author     Laurent Cherpit <laurent.cherpit@gmail.com>
  * @version    0.2
  */
-class RRoEmbed_Provider_Vimeo extends RRoEmbed_Provider_AbstractProvider
+class RRoEmbed_Provider_Vimeo extends RRoEmbed_Provider_BaseProvider
 {
     /**
      * List of optional available parameters to the corresponding provider API
@@ -126,6 +126,8 @@ class RRoEmbed_Provider_Vimeo extends RRoEmbed_Provider_AbstractProvider
      */
     public function __construct( array $optionalParameters = array() )
     {
+        $this->_setApiOptionalParameters( $this->_ApiOptionalParameters );
+        
         parent::__construct(
             'http://www.vimeo.com/api/oembed.json',
             $this->_getOptionalParametersArray( $optionalParameters ),
@@ -136,30 +138,5 @@ class RRoEmbed_Provider_Vimeo extends RRoEmbed_Provider_AbstractProvider
             'http://www.vimeo.com',
             'Vimeo'
         );
-    }
-
-    /**
-     * Get Filtered Additional queryString parameters as Object Array
-     *
-     * @param  $optionalParameters
-     * @return RRoEmbed_Provider_Arguments[]
-     */
-    protected function _getOptionalParametersArray( array $optionalParameters )
-    {
-        try
-        {
-            $optionalParameterObj = new RRoEmbed_Provider_Arguments( $this->_ApiOptionalParameters );
-
-            foreach( $optionalParameters as $param => $value )
-            {
-                $optionalParameterObj[ $param ] = $value;
-            }
-        }
-        catch( RRoEmbed_Exception $e )
-        {
-            echo 'Error: ' . $e->getMessage() . ' in file: ' . substr( $e->getTraceAsString(), strrpos( $e->getTraceAsString(), '#', -10 ) );
-        }
-            
-        return $optionalParameterObj;
     }
 }

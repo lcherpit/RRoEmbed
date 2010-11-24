@@ -26,22 +26,24 @@
 /**
  * Source file containing class RRoEmbed_Provider_BaseProvider.
  * 
- * @package    RRoEmbed
- * @license    http://opensource.org/licenses/mit-license.html MIT License
- * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
- * @version    0.1
- * @see        RRoEmbed_Provider_BaseProvider
+ * @package     RRoEmbed
+ * @license     http://opensource.org/licenses/mit-license.html MIT License
+ * @author      Romain Ruetschi <romain.ruetschi@gmail.com>
+ * @version     0.1
+ * @see         RRoEmbed_Provider_BaseProvider
  */
 
 /**
  * Class RRoEmbed_Provider_BaseProvider.
  * 
- * @todo       Description for Abstract class RRoEmbed_Provider_BaseProvider.
+ * @todo        Description for class RRoEmbed_Provider_BaseProvider.
  *
- * @package    RRoEmbed
- * @license    http://opensource.org/licenses/mit-license.html MIT License
- * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
- * @version    0.1
+ * @package     RRoEmbed
+ * @license     http://opensource.org/licenses/mit-license.html MIT License
+ * @author      Romain Ruetschi <romain.ruetschi@gmail.com>
+ * @version     0.1
+ * @author      Laurent Cherpit <laurent.cherpit@gmail.com>
+ * @version     0.2
  */
 class RRoEmbed_Provider_BaseProvider
 {
@@ -93,7 +95,7 @@ class RRoEmbed_Provider_BaseProvider
      *
      * @var string
      */
-    protected $_responseFormat = '';
+    protected $_requestedFormat = '';
 
     /**
      * List of optional available parameters to the corresponding provider API
@@ -144,11 +146,11 @@ class RRoEmbed_Provider_BaseProvider
 
         var_dump( $optionalParameters );
         
-        $this->_endpoint       = $endpoint;
-        $this->_schemes        = $schemes;
-        $this->_url            = $url;
-        $this->_name           = $name;
-        $this->_responseFormat = $format;
+        $this->_endpoint        = $endpoint;
+        $this->_schemes         = $schemes;
+        $this->_url             = $url;
+        $this->_name            = $name;
+        $this->_requestedFormat = $format;
     }
     
     /**
@@ -220,9 +222,9 @@ class RRoEmbed_Provider_BaseProvider
         return $this->_endpoint;
     }
 
-    public function getResponseFormat()
+    public function getRequestedFormat()
     {
-        return $this->_responseFormat;
+        return $this->_requestedFormat;
     }
 
 

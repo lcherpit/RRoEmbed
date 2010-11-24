@@ -45,22 +45,6 @@
  */
 class RRoEmbed_Consumer
 {
-    
-//    /**
-//     * JSON format.
-//     */
-//    const FORMAT_JSON    = 'json';
-//
-//    /**
-//     * XML format.
-//     */
-//    const FORMAT_XML     = 'xml';
-//
-//    /**
-//     * Default format.
-//     */
-//    const FORMAT_DEFAULT = self::FORMAT_JSON;
-    
     /**
      * Providers
      *
@@ -89,7 +73,7 @@ class RRoEmbed_Consumer
      * or try to discover the right one.
      *
      * @param  string            $url         The URL of the resource to consume.
-     * @param  RRoEmbed_Provider_AbstractProvider $provider    The provider to use.
+     * @param  RRoEmbed_Provider_BaseProvider $provider    The provider to use.
      * 
      * @return RRoEmbed_Resource_AbstractResource
      *
@@ -99,7 +83,7 @@ class RRoEmbed_Consumer
      * @version 0.2
      * @todo pass the format to the provider
      */
-    public function consume( $url, RRoEmbed_Provider_AbstractProvider $provider = NULL )
+    public function consume( $url, RRoEmbed_Provider_BaseProvider $provider = NULL )
     {
         // Try to find a provider matching the supplied URL if no one has been supplied.
         if( !$provider )
@@ -111,16 +95,14 @@ class RRoEmbed_Consumer
         {
             // If a provider was supplied or we found one, store the endpoint URL.
             $endPoint = $provider->getEndpoint();
-            /**
-             * @todo
-             */
-            $format   = $provider->getResponseFormat();
+            $format   = $provider->getRequestedFormat();
         }
         else
         {
             // If no provider was found, try to discover the endpoint URL.
             $discover = new RRoEmbed_Discoverer();
             $endPoint = $discover->getEndpointForUrl( $url );
+            $format   = $discover->getResponseFormat();
         }
         
         $requestUrl = $this->_buildOEmbedRequestUrl( $url, $endPoint, $format );
@@ -178,24 +160,24 @@ class RRoEmbed_Consumer
      * @author Romain Ruetschi <romain.ruetschi@gmail.com>
      * @author Laurent Cherpit <laurent.cherpit@gmail.com>
      */
-    protected function _buildOEmbedRequestUrl( $resource, $endPoint, $format = self::FORMAT_DEFAULT )
+    protected function _buildOEmbedRequestUrl( $resource, $endPoint, $format )
     {
-	    // local var endPoint QuerySrting parameters
-	    $parameters = array(
-		    'url' => $resource
-	    );
-	    
-	    if( strpos( $endPoint, self::FORMAT_JSON ) !== FALSE || strpos( $endPoint, self::FORMAT_XML ) !== FALSE )
-	    {
-			$parameters[ 'format' ] = $format;
-	    }
+        // local var endPoint QuerySrting parameters
+        $parameters = array(
+            'url' => $resource
+        );
+
+        if( strpos( $endPoint, '=' . RRoEmbed_Provider_BaseProvider::RESPONSE_FORMAT_JSON ) === FALSE
+         && strpos( $endPoint, '=' . RRoEmbed_Provider_BaseProvider::RESPONSE_FORMAT_XML ) === FALSE )
+        {
+            $parameters[ 'format' ] = $format;
+        }
         
         $urlParams = http_build_query( $parameters, '', '&' );
         $url       = $endPoint
                    . ( ( strpos( $endPoint, '?' ) !== FALSE ) ? '&' : '?' )
                    . $urlParams;
 
-        var_dump( $url );
         return $url;
     }
     
@@ -204,7 +186,7 @@ class RRoEmbed_Consumer
      *
      * @param  string $url The URL to find an oEmbed provider for.
      * 
-     * @return RRoEmbed_Provider_AbstractProvider
+     * @return RRoEmbed_Provider_BaseProvider
      *
      * @author Romain Ruetschi <romain.ruetschi@gmail.com>
      */
@@ -220,5 +202,4 @@ class RRoEmbed_Consumer
         
         return NULL;
     }
-    
 }

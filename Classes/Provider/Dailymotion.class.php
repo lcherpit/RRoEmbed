@@ -44,13 +44,14 @@
  * @author     Laurent Cherpit <laurent.cherpit@gmail.com>
  * @version    0.1
  */
-class RRoEmbed_Provider_Dailymotion extends RRoEmbed_Provider_AbstractProvider
+class RRoEmbed_Provider_Dailymotion extends RRoEmbed_Provider_BaseProvider
 {
     
-    public function __construct()
+    public function __construct( array $optionalParameters = array() )
     {
         parent::__construct(
             'http://www.dailymotion.com/services/oembed',
+            $this->_getOptionalParametersArray( $optionalParameters ),
             array(
 	            'http://*.dailymotion.com/*',
                 'http://*.dailymotion.com/video/*',

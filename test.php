@@ -17,22 +17,44 @@ $c = new RRoEmbed_Consumer();
 //	new RRoEmbed_Provider_Flickr()
 //);
 
-$o = $c->consume(
-	'http://vimeo.com/15952335',
-	new RRoEmbed_Provider_Vimeo(
-        array( 'width' => 300, 'height' => 200 )
-    )
-);
+//try
+//{
+//    $o = $c->consume(
+//        'http://vimeo.com/15952335',
+//        new RRoEmbed_Provider_Vimeo(
+//            array( 'width' => 300, 'height' => 200 )
+//        )
+//    );
+//
+//    print $o;
+//}
+//catch( RRoEmbed_Exception $e )
+//{
+//    echo 'Error: ' . $e->getMessage() . ' in file: ' . substr( $e->getTraceAsString(), strrpos( $e->getTraceAsString(), '#', -10 ) );
+//}
 
-//$o = $c->consume(
-//	'http://www.dailymotion.com/video/xf02xp_uffie-difficult_music',
-//	new RRoEmbed_Provider_Dailymotion()
-//);
+
+
+// DailyMotion
+try
+{
+    $o = $c->consume(
+        'http://www.dailymotion.com/video/xf02xp_uffie-difficult_music'
+//        new RRoEmbed_Provider_Dailymotion()
+    );
+
+    print $o;
+}
+catch( RRoEmbed_Exception $e )
+{
+    echo 'Error: ' . $e->getMessage() . ' in file: ' . substr( $e->getTraceAsString(), strrpos( $e->getTraceAsString(), '#', -10 ) );
+}
+
 
 
 // Notice you can also omit to specify the provider, if so the Consumer will try to
 // automatically find a valid provider endpoint.
 // $o = $c->consume( 'http://www.flickr.com/photos/romac17/4101838222/' );
 
-print $o;
+
  

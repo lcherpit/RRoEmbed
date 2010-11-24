@@ -43,13 +43,14 @@
  * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
  * @version    0.1
  */
-class RRoEmbed_Provider_Flickr extends RRoEmbed_Provider_AbstractProvider
+class RRoEmbed_Provider_Flickr extends RRoEmbed_Provider_BaseProvider
 {
     
-    public function __construct()
+    public function __construct( array $optionalParameters = array() )
     {
         parent::__construct(
             'http://www.flickr.com/services/oembed',
+            $this->_getOptionalParametersArray( $optionalParameters ),
             array(
                 'http://*.flickr.com/*'
             ),
@@ -57,5 +58,4 @@ class RRoEmbed_Provider_Flickr extends RRoEmbed_Provider_AbstractProvider
             'Flickr'
         );
     }
-    
 }

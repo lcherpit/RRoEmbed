@@ -43,7 +43,7 @@
  * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
  * @version    0.1
  */
-class RRoEmbed_Provider_YouTube extends RRoEmbed_Provider_AbstractProvider
+class RRoEmbed_Provider_YouTube extends RRoEmbed_Provider_BaseProvider
 {
     
     public function __construct()

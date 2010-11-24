@@ -74,7 +74,14 @@ class RRoEmbed_Discoverer
      * @var string
      */
     protected $_preferredFormat = 'application/json';
-    
+
+    /**
+     * Matched format
+     *
+     * @var string
+     */
+    protected $_responseFormat = '';
+
     /**
      * Get the provider's endpoint URL for the supplied resource. 
      *
@@ -83,17 +90,45 @@ class RRoEmbed_Discoverer
      * @return void
      * 
      * @author Romain Ruetschi <romain.ruetschi@gmail.com>
+     * @author Laurent Cherpit <laurent.cherpit@gmail.com> 
      */
     public function getEndpointForUrl( $url )
     {
         if( !isset( $this->_cachedEndpoints[ $url ] ) )
         {
-            $this->_cachedEndpoints[ $url ] = $this->_fetchEndpointForUrl( $url );
+            $endPoint = $this->_fetchEndpointForUrl( $url );
+
+            // just clean the QueryString. that will be rebuild after.
+            $this->_cachedEndpoints[ $url ] = substr( $endPoint, 0, strpos( $endPoint, '?' ) );
         }
-        
+
         return $this->_cachedEndpoints[ $url ];
     }
-    
+
+    /**
+     * Get the format for the supplied resource that match. 
+     *
+     * @return string
+     * @author Laurent Cherpit <laurent.cherpit@gmail.com>
+     */
+    public function getResponseFormat()
+    {
+        return $this->_responseFormat;
+    }
+
+    /**
+     * Set the format for the supplied resource that match.
+     *
+     * @return string
+     * @author Laurent Cherpit <laurent.cherpit@gmail.com>
+     */
+    protected function _setResponseFormat( $format )
+    {
+        $format = substr( $format, ( strpos( $format, '/' ) + 1 ) );
+        
+        $this->_responseFormat = $format;
+    }
+
     /**
      * Fetch the provider's endpoint URL for the supplied resource.
      *
@@ -130,15 +165,17 @@ class RRoEmbed_Discoverer
                 'No valid oEmbed links found on the document at "' . $url . '".'
             );
         }
-        
+
         foreach( $matches as $match )
         {
+            $this->_setResponseFormat( $match[ 'Format' ] );
+            
             if( $match[ 'Format' ] === $this->_preferredFormat )
             {
                 return $this->_extractEndpointFromAttributes( $match[ 'Attributes' ] );
             }
         }
-        
+
         return $this->_extractEndpointFromAttributes( $match[ 'Attributes' ] );
     }
     
