@@ -98,6 +98,13 @@ class RRoEmbed_Provider_BaseProvider
     protected $_requestedFormat = '';
 
     /**
+     * QueryString Parameters Object storage. 
+     *
+     * @var RRoEmbed_Provider_Arguments[]
+     */
+    protected $_optionalParameterObj = NULL;
+
+    /**
      * List of optional available parameters to the corresponding provider API
      *
      * @var array
@@ -122,7 +129,7 @@ class RRoEmbed_Provider_BaseProvider
      */
     public function __construct(
         $endpoint,
-        RRoEmbed_Provider_Arguments $optionalParameters,
+        array $optionalParameters = array(),
         array $schemes = array(),
         $url = '',
         $name = '',
@@ -144,8 +151,7 @@ class RRoEmbed_Provider_BaseProvider
             }
         }
 
-        var_dump( $optionalParameters );
-        
+        $this->_setOptionalParametersObj( $optionalParameters );
         $this->_endpoint        = $endpoint;
         $this->_schemes         = $schemes;
         $this->_url             = $url;
@@ -227,37 +233,48 @@ class RRoEmbed_Provider_BaseProvider
         return $this->_requestedFormat;
     }
 
-
-    protected function _setApiOptionalParameters( array $apiOptionalParameters = array() )
-    {
-        $this->_ApiOptionalParameters = $apiOptionalParameters;
-
-        var_dump( $this->_ApiOptionalParameters );
-    }
-
-//    abstract protected function _getOptionalParametersArray( array $optionalParameters );
     /**
      * Get Filtered Additional queryString parameters as Object Array
      *
      * @param  $optionalParameters
      * @return RRoEmbed_Provider_Arguments[]
      */
-    protected function _getOptionalParametersArray( array $optionalParameters )
+    public function getOptionalParametersObj()
     {
-        try
-        {
-            $optionalParameterObj = new RRoEmbed_Provider_Arguments( $this->_ApiOptionalParameters );
+        return $this->_optionalParameterObj;
+    }
 
-            foreach( $optionalParameters as $param => $value )
+    /**
+     * Set Filtered Additional queryString parameters as Object Array
+     *
+     * @param  $optionalParameters
+     * @return void
+     */
+    protected function _setOptionalParametersObj( array $optionalParameters )
+    {
+        if( !isset( $this->_optionalParameterObj ) )
+        {
+            try
             {
-                $optionalParameterObj[ $param ] = $value;
+                $this->_optionalParameterObj = new RRoEmbed_Provider_Arguments( $this->_ApiOptionalParameters );
+
+                foreach( $optionalParameters as $param => $value )
+                {
+                    $this->_optionalParameterObj[ $param ] = $value;
+                }
+            }
+            catch( RRoEmbed_Exception $e )
+            {
+                echo 'Error: ' . $e->getMessage() . ' in file: ' . substr( $e->getTraceAsString(), strrpos( $e->getTraceAsString(), '#', -10 ) );
             }
         }
-        catch( RRoEmbed_Exception $e )
-        {
-            echo 'Error: ' . $e->getMessage() . ' in file: ' . substr( $e->getTraceAsString(), strrpos( $e->getTraceAsString(), '#', -10 ) );
-        }
 
-        return $optionalParameterObj;
+        return $this->_optionalParameterObj;
     }
+
+    protected function _setApiOptionalParameters( array $apiOptionalParameters = array() )
+    {
+        $this->_ApiOptionalParameters = $apiOptionalParameters;
+    }
+
 }

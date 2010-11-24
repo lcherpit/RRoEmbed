@@ -71,7 +71,7 @@ class RRoEmbed_Provider_Arguments implements ArrayAccess
         {
             if( in_array( $offset, $this->_optionalParametersFromApi, TRUE ) )
             {
-                $this->_arguments[ $offset ] = $value;
+                $this->_arguments[ $offset ] = rawurlencode( $value );
             }
             else
             {
@@ -107,7 +107,22 @@ class RRoEmbed_Provider_Arguments implements ArrayAccess
     {
         return isset( $this->_arguments[ $offset ] );
     }
+
+    public function getQueryString()
+    {
+        $queryString = '';
+
+        if( count( $this->_arguments ) )
+        {
+            $queryString = '&' . http_build_query( $this->_arguments, '', '&' );
+        }
+
+        return $queryString;
+    }
+    
+    public function __toString()
+    {
+        return $this->getQueryString();
+    }
+
 }
-
-
-//  property_exists

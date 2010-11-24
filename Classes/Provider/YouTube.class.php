@@ -46,10 +46,11 @@
 class RRoEmbed_Provider_YouTube extends RRoEmbed_Provider_BaseProvider
 {
     
-    public function __construct()
+    public function __construct( array $optionalParameters = array() )
     {
         parent::__construct(
             'http://www.youtube.com/oembed',
+            $optionalParameters,
             array(
                 'http://*.youtube.com/*'
             ),

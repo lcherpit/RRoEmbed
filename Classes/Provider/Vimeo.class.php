@@ -130,7 +130,7 @@ class RRoEmbed_Provider_Vimeo extends RRoEmbed_Provider_BaseProvider
         
         parent::__construct(
             'http://www.vimeo.com/api/oembed.json',
-            $this->_getOptionalParametersArray( $optionalParameters ),
+            $optionalParameters,
             array(
                 'http://*.vimeo.com/*',
                 'http://*.vimeo.com/groups/*/*'

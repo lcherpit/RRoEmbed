@@ -51,7 +51,7 @@ class RRoEmbed_Resource_Html extends RRoEmbed_Resource_AbstractResource
      *
      * @var string
      */
-    protected $_html   = 0;
+    protected $_html   = '';
     
     /**
      * Width

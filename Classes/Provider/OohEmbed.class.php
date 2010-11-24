@@ -46,10 +46,11 @@
 class RRoEmbed_Provider_OohEmbed extends RRoEmbed_Provider_BaseProvider
 {
 
-    public function __construct()
+    public function __construct( array $optionalParameters = array() )
     {
         parent::__construct(
             'http://oohembed.com/oohembed',
+            $optionalParameters,
             array( '*' ),
             'http://www.oohembed.com',
             'oohEmbed'

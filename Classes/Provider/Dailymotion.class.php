@@ -46,12 +46,37 @@
  */
 class RRoEmbed_Provider_Dailymotion extends RRoEmbed_Provider_BaseProvider
 {
-    
+    /**
+     * List of optional available parameters to the corresponding provider API
+     *
+     * @var array
+     */
+    protected $_ApiOptionalParameters = array(
+
+        /**
+         * The maximum width of the embedded video can take on the destination page.
+         */
+        'maxwidth',
+
+        /**
+         * The maximum height the embedded video can take on the destination page.
+         */
+        'maxheight',
+
+        /**
+         * When returning JSON, wrap in this function
+         * @see JSONP proposal <http://bob.pythonmac.org/archives/2005/12/05/remote-json-jsonp/> for more info
+         */
+        'callback'
+	);
+
     public function __construct( array $optionalParameters = array() )
     {
+        $this->_setApiOptionalParameters( $this->_ApiOptionalParameters );
+        
         parent::__construct(
             'http://www.dailymotion.com/services/oembed',
-            $this->_getOptionalParametersArray( $optionalParameters ),
+            $optionalParameters,
             array(
 	            'http://*.dailymotion.com/*',
                 'http://*.dailymotion.com/video/*',
@@ -63,12 +88,3 @@ class RRoEmbed_Provider_Dailymotion extends RRoEmbed_Provider_BaseProvider
     }
     
 }
-/*
- * http://www.dailymotion.com/services/oembed?format=json
-    &url=http%3A//www.dailymotion.com/video/xf02xp_uffie-difficult_music
-url (required): the Dailymotion URL for a video.
-maxwidth: The maximum width of the embedded video can take on the destination page.
-maxheight: The maximum height the embedded video can take on the destination page.
-callback: When returning JSON, wrap in this function (see JSONP proposal <http://bob.pythonmac.org/archives/2005/12/05/remote-json-jsonp/> for more info
- * 
- */

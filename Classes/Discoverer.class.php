@@ -42,14 +42,33 @@
  * @license    http://opensource.org/licenses/mit-license.html MIT License
  * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
  * @version    0.1
+ * @author Laurent Cherpit <laurent.cherpit@gmail.com>
+ * @version    0.2 
  */
 class RRoEmbed_Discoverer
 {
     
     /**
-     * From Services_oEmbed (Services/oEmbed.php:304).
+     * Regex to get provided discover link. (link args aren't always in the same order)
      */
-    const LINK_REGEX = '#<link(?:[^>]*)type="(?P<Format>@formats@)\+oembed"(?P<Attributes>[^>]*)>#i';
+//    const LINK_REGEX = '#<link(?:[^>]*)type="(?P<Format>@formats@)\+oembed"(?P<Attributes>[^>]*)>#i';
+
+    const LINK_REGEX = '#<link(?P<Link>[^>]+(?:@formats@\+oembed")[^>]+)>#i';
+
+    const ARGS_REGEX = '/(
+                            (?P<Argument>[a-zA-Z0-9:]+)=        # match argument
+                            (?:
+                                (?:"|\')
+                                    (?P<quotedValue>            # match value
+                                        [^"]*
+                                        |
+                                        [^\']*
+                                    )
+                                (?:"|\')
+                            )
+                            \s+
+                            )+?
+                        /ix';
     
     /**
      * Cached endpoints.
@@ -65,6 +84,8 @@ class RRoEmbed_Discoverer
      */
     protected $_supportedFormats = array(
         'application/json',
+        'application/xml',
+        'text/json',
         'text/xml'
     );
     
@@ -73,7 +94,7 @@ class RRoEmbed_Discoverer
      *
      * @var string
      */
-    protected $_preferredFormat = 'application/json';
+    protected $_preferredFormat = 'json';
 
     /**
      * Matched format
@@ -101,7 +122,7 @@ class RRoEmbed_Discoverer
             // just clean the QueryString. that will be rebuild after.
             $this->_cachedEndpoints[ $url ] = substr( $endPoint, 0, strpos( $endPoint, '?' ) );
         }
-
+        
         return $this->_cachedEndpoints[ $url ];
     }
 
@@ -119,14 +140,27 @@ class RRoEmbed_Discoverer
     /**
      * Set the format for the supplied resource that match.
      *
-     * @return string
+     * @return void
      * @author Laurent Cherpit <laurent.cherpit@gmail.com>
      */
     protected function _setResponseFormat( $format )
     {
-        $format = substr( $format, ( strpos( $format, '/' ) + 1 ) );
-        
         $this->_responseFormat = $format;
+    }
+
+    /**
+     * Get the format string (json | xml)
+     *
+     * @return string
+     * @author Laurent Cherpit <laurent.cherpit@gmail.com>
+     */
+    protected function _getSimpleFormat( $format )
+    {
+        $begin = ( strpos( $format, '/' ) + 1 );
+        $end   = strrpos( $format, '+' );
+        $len   = $end - $begin; 
+
+        return substr( $format, $begin, $len );
     }
 
     /**
@@ -165,18 +199,26 @@ class RRoEmbed_Discoverer
                 'No valid oEmbed links found on the document at "' . $url . '".'
             );
         }
-
+        
         foreach( $matches as $match )
         {
-            $this->_setResponseFormat( $match[ 'Format' ] );
+            preg_match_all( self::ARGS_REGEX, $match[ 'Link' ], $matchesArgs, PREG_SET_ORDER );
             
-            if( $match[ 'Format' ] === $this->_preferredFormat )
+            foreach( $matchesArgs as $matchesArg )
             {
-                return $this->_extractEndpointFromAttributes( $match[ 'Attributes' ] );
+                if( $matchesArg[ 'Argument' ] === 'type' )
+                {
+                    $this->_setResponseFormat( $this->_getSimpleFormat( $matchesArg[ 'quotedValue' ] ) );
+                    
+                    if( strpos( $matchesArg[ 'quotedValue' ], $this->_preferredFormat ) !== FALSE )
+                    {
+                        return $this->_extractEndpointFromAttributes( $matchesArgs );
+                    }
+                }
             }
         }
 
-        return $this->_extractEndpointFromAttributes( $match[ 'Attributes' ] );
+        return $this->_extractEndpointFromAttributes( $matchesArgs );
     }
     
     /**
@@ -188,16 +230,16 @@ class RRoEmbed_Discoverer
      * 
      * @author Romain Ruetschi <romain.ruetschi@gmail.com>
      */
-    protected function _extractEndpointFromAttributes( $attributes )
+    protected function _extractEndpointFromAttributes( $matchesArgs )
     {
-        if( !preg_match( '/href="([^"]+)"/i', $attributes, $matches ) ) {
-            
-            throw new RRoEmbed_Exception(
-                'No "href" attribute in <link> tag.'
-            );
+
+        foreach( $matchesArgs as $matchesArg )
+        {
+            if( $matchesArg[ 'Argument' ] === 'href' )
+            {
+                return $matchesArg[ 'quotedValue' ];
+            }
         }
-        
-        return $matches[ 1 ];
     }
     
 }

@@ -94,8 +94,9 @@ class RRoEmbed_Consumer
         if( $provider )
         {
             // If a provider was supplied or we found one, store the endpoint URL.
-            $endPoint = $provider->getEndpoint();
-            $format   = $provider->getRequestedFormat();
+            $endPoint      = $provider->getEndpoint();
+            $format        = $provider->getRequestedFormat();
+            $qStrOptParams = $provider->getOptionalParametersObj()->getQueryString();
         }
         else
         {
@@ -104,13 +105,16 @@ class RRoEmbed_Consumer
             $endPoint = $discover->getEndpointForUrl( $url );
             $format   = $discover->getResponseFormat();
         }
+
+
+
         
-        $requestUrl = $this->_buildOEmbedRequestUrl( $url, $endPoint, $format );
+        $requestUrl = $this->_buildOEmbedRequestUrl( $url, $endPoint, $format, $qStrOptParams );
         $request    = new RRoEmbed_Request( $requestUrl );
         $body       = $request->send();
         
         $methodName = '_process' . ucfirst( strtolower( $format ) ) . 'Response';
-        
+
         return $this->$methodName( $body );
     }
     
@@ -157,10 +161,11 @@ class RRoEmbed_Consumer
      * 
      * @return string
      *
+     * @todo to refactor
      * @author Romain Ruetschi <romain.ruetschi@gmail.com>
      * @author Laurent Cherpit <laurent.cherpit@gmail.com>
      */
-    protected function _buildOEmbedRequestUrl( $resource, $endPoint, $format )
+    protected function _buildOEmbedRequestUrl( $resource, $endPoint, $format, $qStrOptParams = '' )
     {
         // local var endPoint QuerySrting parameters
         $parameters = array(
@@ -176,7 +181,7 @@ class RRoEmbed_Consumer
         $urlParams = http_build_query( $parameters, '', '&' );
         $url       = $endPoint
                    . ( ( strpos( $endPoint, '?' ) !== FALSE ) ? '&' : '?' )
-                   . $urlParams;
+                   . $urlParams . $qStrOptParams;
 
         return $url;
     }

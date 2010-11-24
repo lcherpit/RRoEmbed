@@ -50,7 +50,7 @@ class RRoEmbed_Provider_Flickr extends RRoEmbed_Provider_BaseProvider
     {
         parent::__construct(
             'http://www.flickr.com/services/oembed',
-            $this->_getOptionalParametersArray( $optionalParameters ),
+            $optionalParameters,
             array(
                 'http://*.flickr.com/*'
             ),
