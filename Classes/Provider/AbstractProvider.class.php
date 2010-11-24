@@ -45,6 +45,20 @@
  */
 Abstract class RRoEmbed_Provider_AbstractProvider
 {
+    /**
+     * JSON format.
+     */
+    const RESPONSE_FORMAT_JSON    = 'json';
+
+    /**
+     * XML format.
+     */
+    const RESPONSE_FORMAT_XML     = 'xml';
+
+    /**
+     * Default format.
+     */
+    const RESPONSE_FORMAT_DEFAULT = self::RESPONSE_FORMAT_JSON;
 
     /**
      * Name
@@ -73,18 +87,38 @@ Abstract class RRoEmbed_Provider_AbstractProvider
      * @var string
      */
     protected $_endpoint = '';
+
+    /**
+     * API Response format XML or JSON
+     *
+     * @var string
+     */
+     protected $_responseFormat = '';
+
     
     /**
      * Create a new RRoEmbed_Provider_AbstractProvider instance.
      *
-     * @param string $endpoint The provider's endpoint URL.
-     * @param array  $schemes The schemes the providers match.
-     * @param string $url The URL of provider's website.
-     * @param string $name The name of the provider.
+     * @param string                        $endpoint The provider's endpoint URL.
+     * @param RRoEmbed_Provider_Arguments[] $optionalParameters additional QueryString params 
+     * @param array                         $schemes The schemes the providers match.
+     * @param string                        $url    The URL of provider's website.
+     * @param string                        $name   The name of the provider.
+     * @param string                        $format The format of the data to fetch.
      *
      * @author Romain Ruetschi <romain.ruetschi@gmail.com>
+     * @version 0.1
+     * @author  Laurent Cherpit <laurent.cherpit@gmail.com>
+     * @version 0.2
      */
-    public function __construct( $endpoint, array $schemes = array(), $url = '', $name = '' )
+    public function __construct(
+        $endpoint,
+        RRoEmbed_Provider_Arguments $optionalParameters,
+        array $schemes = array(),
+        $url = '',
+        $name = '',
+        $format = self::RESPONSE_FORMAT_DEFAULT
+    )
     {
         foreach( $schemes as $key => $scheme )
         {
@@ -100,11 +134,14 @@ Abstract class RRoEmbed_Provider_AbstractProvider
                 }
             }
         }
+
+        var_dump( $optionalParameters );
         
         $this->_endpoint = $endpoint;
         $this->_schemes  = $schemes;
         $this->_url      = $url;
         $this->_name     = $name;
+        $this->_responseFormat   = $format;
     }
     
     /**
@@ -175,5 +212,11 @@ Abstract class RRoEmbed_Provider_AbstractProvider
     {
         return $this->_endpoint;
     }
+
+    public function getResponseFormat()
+    {
+        return $this->_responseFormat;
+    }
     
+    abstract protected function _getOptionalParametersArray( array $optionalParameters );
 }

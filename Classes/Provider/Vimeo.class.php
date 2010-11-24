@@ -47,30 +47,88 @@
  */
 class RRoEmbed_Provider_Vimeo extends RRoEmbed_Provider_AbstractProvider
 {
-	/**
-	 * The exact width of the video. Defaults to original size.
-	 * (optional)
-	 *
-	 * @var Integer
-	 */
-	protected $_width;
+    /**
+     * List of optional available parameters to the corresponding provider API
+     *
+     * @var array
+     */
+    protected $_ApiOptionalParameters = array(
 
-	/**
-	 * Same as width, but video will not exceed original size.
-	 * (optional)
-	 * 
-	 * @var Integer
-	 */
-	protected $_maxwidth;
+        /**
+         * The exact width of the video. Defaults to original size.
+         */
+        'width',
 
-	protected $_height;
+        /**
+         * Same as width, but video will not exceed original size.
+         */
+        'maxwidth',
 
-	protected $_maxheight;
-    
-    public function __construct()
+        /**
+         * The exact height of the video. Defaults to original size.
+         */
+        'height',
+
+        /**
+         * Show the byline on the video. Defaults to true.
+         */
+        'byline',
+
+        /**
+         * Show the title on the video. Defaults to true.
+         */
+        'title',
+
+        /**
+         * Show the user's portrait on the video. Defaults to true.
+         */
+        'portrait',
+
+        /**
+         * Specify the color of the video controls.
+         */
+        'color',
+
+        /**
+         * When returning JSON, wrap in this function.
+         */
+        'callback',
+
+        /**
+         * Automatically start playback of the video. Defaults to false.
+         */
+        'autoplay',
+
+        /**
+         * Make the embed code XHTML compliant. Defaults to true.
+         */
+        'xhtml',
+
+        /**
+         * Enable the Javascript API for Moogaloop. Defaults to false.
+         */
+        'api',
+
+        /**
+         * Add the "wmode" parameter. Can be either transparent or opaque.
+         */
+        'wmode',
+
+        /**
+         * Use our new embed code. Defaults to true. NEW!
+         */
+        'iframe'
+	);
+
+    /**
+     * @param array $optionalParameters
+     * @return void
+     */
+    public function __construct( array $optionalParameters = array() )
     {
         parent::__construct(
             'http://www.vimeo.com/api/oembed.json',
+            $this->_getOptionalParametersArray( $optionalParameters ),
             array(
                 'http://*.vimeo.com/*',
                 'http://*.vimeo.com/groups/*/*'
@@ -79,38 +137,29 @@ class RRoEmbed_Provider_Vimeo extends RRoEmbed_Provider_AbstractProvider
             'Vimeo'
         );
     }
-    
-}
-/*
-url
-The Vimeo URL for a video.
-width
-(optional) The exact width of the video. Defaults to original size.
-maxwidth
-(optional) Same as width, but video will not exceed original size.
-height
-(optional) The exact height of the video. Defaults to original size.
-maxheight
-(optional) Same as height, but video will not exceed original size.
-byline
-(optional) Show the byline on the video. Defaults to true.
-title
-(optional) Show the title on the video. Defaults to true.
-portrait
-(optional) Show the user's portrait on the video. Defaults to true.
-color
-(optional) Specify the color of the video controls.
-callback
-(optional) When returning JSON, wrap in this function.
-autoplay
-(optional) Automatically start playback of the video. Defaults to false.
-xhtml
-(optional) Make the embed code XHTML compliant. Defaults to true.
-api
-(optional) Enable the Javascript API for Moogaloop. Defaults to false.
-wmode
-(optional) Add the "wmode" parameter. Can be either transparent or opaque.
-iframe
-(optional) Use our new embed code. Defaults to true. NEW!
 
-	*/
+    /**
+     * Get Filtered Additional queryString parameters as Object Array
+     *
+     * @param  $optionalParameters
+     * @return RRoEmbed_Provider_Arguments[]
+     */
+    protected function _getOptionalParametersArray( array $optionalParameters )
+    {
+        try
+        {
+            $optionalParameterObj = new RRoEmbed_Provider_Arguments( $this->_ApiOptionalParameters );
+
+            foreach( $optionalParameters as $param => $value )
+            {
+                $optionalParameterObj[ $param ] = $value;
+            }
+        }
+        catch( RRoEmbed_Exception $e )
+        {
+            echo 'Error: ' . $e->getMessage() . ' in file: ' . substr( $e->getTraceAsString(), strrpos( $e->getTraceAsString(), '#', -10 ) );
+        }
+            
+        return $optionalParameterObj;
+    }
+}

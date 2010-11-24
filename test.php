@@ -19,7 +19,9 @@ $c = new RRoEmbed_Consumer();
 
 $o = $c->consume(
 	'http://vimeo.com/15952335',
-	new RRoEmbed_Provider_Vimeo()
+	new RRoEmbed_Provider_Vimeo(
+        array( 'width' => 300, 'height' => 200 )
+    )
 );
 
 //$o = $c->consume(

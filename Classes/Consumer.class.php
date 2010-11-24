@@ -46,20 +46,20 @@
 class RRoEmbed_Consumer
 {
     
-    /**
-     * JSON format.
-     */
-    const FORMAT_JSON    = 'json';
-    
-    /**
-     * XML format.
-     */
-    const FORMAT_XML     = 'xml';
-    
-    /**
-     * Default format.
-     */
-    const FORMAT_DEFAULT = self::FORMAT_JSON;
+//    /**
+//     * JSON format.
+//     */
+//    const FORMAT_JSON    = 'json';
+//
+//    /**
+//     * XML format.
+//     */
+//    const FORMAT_XML     = 'xml';
+//
+//    /**
+//     * Default format.
+//     */
+//    const FORMAT_DEFAULT = self::FORMAT_JSON;
     
     /**
      * Providers
@@ -90,13 +90,16 @@ class RRoEmbed_Consumer
      *
      * @param  string            $url         The URL of the resource to consume.
      * @param  RRoEmbed_Provider_AbstractProvider $provider    The provider to use.
-     * @param  string            $format      The format of the data to fetch.
-     *
+     * 
      * @return RRoEmbed_Resource_AbstractResource
      *
-     * @author Romain Ruetschi <romain.ruetschi@gmail.com>
+     * @author  Romain Ruetschi <romain.ruetschi@gmail.com>
+     * @version 0.1
+     * @author  Laurent Cherpit <laurent.cherpit@gmail.com>
+     * @version 0.2
+     * @todo pass the format to the provider
      */
-    public function consume( $url, RRoEmbed_Provider_AbstractProvider $provider = NULL, $format = self::FORMAT_DEFAULT )
+    public function consume( $url, RRoEmbed_Provider_AbstractProvider $provider = NULL )
     {
         // Try to find a provider matching the supplied URL if no one has been supplied.
         if( !$provider )
@@ -108,6 +111,10 @@ class RRoEmbed_Consumer
         {
             // If a provider was supplied or we found one, store the endpoint URL.
             $endPoint = $provider->getEndpoint();
+            /**
+             * @todo
+             */
+            $format   = $provider->getResponseFormat();
         }
         else
         {
