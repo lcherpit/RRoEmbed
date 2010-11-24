@@ -24,26 +24,26 @@
  */
 
 /**
- * Source file containing class RRoEmbed_Provider_AbstractProvider.
+ * Source file containing class RRoEmbed_Provider_BaseProvider.
  * 
  * @package    RRoEmbed
  * @license    http://opensource.org/licenses/mit-license.html MIT License
  * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
  * @version    0.1
- * @see        RRoEmbed_Provider_AbstractProvider
+ * @see        RRoEmbed_Provider_BaseProvider
  */
 
 /**
- * Abstract Class RRoEmbed_Provider_AbstractProvider.
+ * Class RRoEmbed_Provider_BaseProvider.
  * 
- * @todo       Description for Abstract class RRoEmbed_Provider_AbstractProvider.
+ * @todo       Description for Abstract class RRoEmbed_Provider_BaseProvider.
  *
  * @package    RRoEmbed
  * @license    http://opensource.org/licenses/mit-license.html MIT License
  * @author     Romain Ruetschi <romain.ruetschi@gmail.com>
  * @version    0.1
  */
-Abstract class RRoEmbed_Provider_AbstractProvider
+class RRoEmbed_Provider_BaseProvider
 {
     /**
      * JSON format.
@@ -93,11 +93,18 @@ Abstract class RRoEmbed_Provider_AbstractProvider
      *
      * @var string
      */
-     protected $_responseFormat = '';
+    protected $_responseFormat = '';
+
+    /**
+     * List of optional available parameters to the corresponding provider API
+     *
+     * @var array
+     */
+    private $_ApiOptionalParameters = array();
 
     
     /**
-     * Create a new RRoEmbed_Provider_AbstractProvider instance.
+     * Create a new RRoEmbed_Provider_BaseProvider instance.
      *
      * @param string                        $endpoint The provider's endpoint URL.
      * @param RRoEmbed_Provider_Arguments[] $optionalParameters additional QueryString params 
@@ -137,11 +144,11 @@ Abstract class RRoEmbed_Provider_AbstractProvider
 
         var_dump( $optionalParameters );
         
-        $this->_endpoint = $endpoint;
-        $this->_schemes  = $schemes;
-        $this->_url      = $url;
-        $this->_name     = $name;
-        $this->_responseFormat   = $format;
+        $this->_endpoint       = $endpoint;
+        $this->_schemes        = $schemes;
+        $this->_url            = $url;
+        $this->_name           = $name;
+        $this->_responseFormat = $format;
     }
     
     /**
@@ -217,6 +224,38 @@ Abstract class RRoEmbed_Provider_AbstractProvider
     {
         return $this->_responseFormat;
     }
-    
-    abstract protected function _getOptionalParametersArray( array $optionalParameters );
+
+
+    protected function _setApiOptionalParameters( array $apiOptionalParameters = array() )
+    {
+        $this->_ApiOptionalParameters = $apiOptionalParameters;
+
+        var_dump( $this->_ApiOptionalParameters );
+    }
+
+//    abstract protected function _getOptionalParametersArray( array $optionalParameters );
+    /**
+     * Get Filtered Additional queryString parameters as Object Array
+     *
+     * @param  $optionalParameters
+     * @return RRoEmbed_Provider_Arguments[]
+     */
+    protected function _getOptionalParametersArray( array $optionalParameters )
+    {
+        try
+        {
+            $optionalParameterObj = new RRoEmbed_Provider_Arguments( $this->_ApiOptionalParameters );
+
+            foreach( $optionalParameters as $param => $value )
+            {
+                $optionalParameterObj[ $param ] = $value;
+            }
+        }
+        catch( RRoEmbed_Exception $e )
+        {
+            echo 'Error: ' . $e->getMessage() . ' in file: ' . substr( $e->getTraceAsString(), strrpos( $e->getTraceAsString(), '#', -10 ) );
+        }
+
+        return $optionalParameterObj;
+    }
 }
